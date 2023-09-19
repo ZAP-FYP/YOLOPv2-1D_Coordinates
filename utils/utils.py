@@ -255,23 +255,57 @@ def get_drivable_area_in_1D(segmentation_matrix):
     # polygon_coords = convert_seg_to_arr(discretized_matrix)
 
     polygon_coords = convert_seg_to_arr(segmentation_matrix)
-    print(f"polygon_coords.shape {len(polygon_coords)}")
+    print(f"len(polygon_coords) {len(polygon_coords)}")
+    # Separate x and y coordinates
+    x_values = [coord[0] for coord in polygon_coords]
+    y_values = [coord[1] for coord in polygon_coords]
 
-    plt.figure(figsize=(8, 4))
-    plt.plot(polygon_coords, label="Label Array")
-    # plt.legend()  # Add a legend to differentiate between Label Array and y_hat Array
+    # Create a scatter plot
+    plt.scatter(x_values, y_values, marker='o', color='blue', s=2,label='convert_seg_to_arr')
 
-    # Save the figure
-    plt.savefig(os.path.join("visualizations", f"sample.png"))
+    # Add labels and a legend
+    plt.xlabel('X-coordinate')
+    plt.ylabel('Y-coordinate')
+
+    # plt.legend()
+    # plt.show()
+
+    # plt.figure(figsize=(8, 4))
+    # plt.plot(polygon_coords, label="convert_seg_to_arr")
+    plt.savefig(os.path.join("visualizations/convert_seg_to_arr", f"sample.png"))
     plt.close()
     # print(polygon_coords)
     # Create a dictionary to store the maximum Y value for each X value
     
     filtered_polygon_coords = remove_bottom_edge(polygon_coords)
-    print(f"filtered_polygon_coords.shape {len(filtered_polygon_coords)}")
+    x_values = [coord[0] for coord in filtered_polygon_coords]
+    y_values = [coord[1] for coord in filtered_polygon_coords]
+     # Create a scatter plot
+    plt.scatter(x_values, y_values, marker='o', color='blue',s=2, label='remove_bottom_edge')
 
+    # Add labels and a legend
+    plt.xlabel('X-coordinate')
+    plt.ylabel('Y-coordinate')
+    print(f"filtered_polygon_coords.shape {len(filtered_polygon_coords)}")
+    # plt.figure(figsize=(8, 4))
+    # plt.plot(filtered_polygon_coords, label="remove_bottom_edge")
+    plt.savefig(os.path.join("visualizations/remove_bottom_edge", f"sample.png"))
+    plt.close()
+    
     updated_coords = fill_missing_coords(filtered_polygon_coords, segmentation_matrix.shape[1], segmentation_matrix.shape[0])
+    x_values = [coord[0] for coord in updated_coords]
+    y_values = [coord[1] for coord in updated_coords]
+     # Create a scatter plot
+    plt.scatter(x_values, y_values, marker='o', color='blue',s=2, label='remove_bottom_edge')
+
+    # Add labels and a legend
+    plt.xlabel('X-coordinate')
+    plt.ylabel('Y-coordinate')
     print(f"updated_coords.shape {len(updated_coords)}")
+    # plt.figure(figsize=(8, 4))
+    # plt.plot(updated_coords, label="fill_missing_coords")
+    plt.savefig(os.path.join("visualizations/fill_missing_coords", f"sample.png"))
+    plt.close()
 
     width_N = len(updated_coords) // 100
     print(len(updated_coords))
