@@ -179,8 +179,8 @@ def detect():
     X = np.array(prev_10_frames)  # X.shape = (n, 10, 100)
     y = np.array(next_5_frames)   # y.shape = (n, 5, 100)
 
-    np.save('X2.npy', X)
-    np.save('y2.npy', y)
+    np.save('train_data/X.npy', X)
+    np.save('train_data/y.npy', y)
     # X = np.random.rand(500, 10, 100)
     # y = np.random.rand(500, 5, 100)
 

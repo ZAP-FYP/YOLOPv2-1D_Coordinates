@@ -262,7 +262,7 @@ def get_drivable_area_in_1D(segmentation_matrix):
     # plt.legend()  # Add a legend to differentiate between Label Array and y_hat Array
 
     # Save the figure
-    plt.savefig(os.path.join("visualization_1", f"sample.png"))
+    plt.savefig(os.path.join("visualizations", f"sample.png"))
     plt.close()
     # print(polygon_coords)
     # Create a dictionary to store the maximum Y value for each X value

@@ -1,4 +1,5 @@
-python demo.py  --source data/example.jpg --device cpu
+Video splitting - ffmpeg -i data/videos-long/video-C1-20221124-1.mp4 -c copy -map 0 -segment_time 60 -f segment data/videos-long/chunks/video-C1-20221124-1.mp4/output_video_%03d.mp4
+Start segmentation - python demo.py  --source data/example.jpg --device cpu
 <div align="center">
 <h1> YOLOPv2:rocket:: Better, Faster, Stronger for Panoptic driving Perception </h1>
 <!-- <--!span><font size="5", > Efficient and Robust 2D-to-BEV Representation Learning via Geometry-guided Kernel Transformer
