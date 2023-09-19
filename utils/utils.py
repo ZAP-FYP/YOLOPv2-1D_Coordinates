@@ -13,6 +13,8 @@ import numpy as np
 import torch
 import torchvision
 import matplotlib.pyplot as plt
+import math
+from scipy.spatial.distance import euclidean
 
 logger = logging.getLogger(__name__)
 
@@ -227,6 +229,8 @@ def show_seg_result(img, result, palette=None,is_demo=False, edge_thickness=3):
 
     # Calculate the scaling factor to maintain the aspect ratio
     scale_factor = new_width / edge_pixels.shape[1]
+    current_width = edge_pixels.shape[1]
+    current_height = edge_pixels.shape[0]
 
     # Calculate the new height
     new_height = int(edge_pixels.shape[0] * scale_factor)
@@ -246,16 +250,18 @@ def show_seg_result(img, result, palette=None,is_demo=False, edge_thickness=3):
     print(f"binary_edge_pixels.unique {np.unique(binary_edge_pixels, return_counts=True)}")
 
     # resized_edge_pixels now contains the downsampled image with a width of 600 pixels while maintaining the aspect ratio.
-    return binary_edge_pixels
+    return edge_pixels, current_width, current_height
 
 
-def get_drivable_area_in_1D(segmentation_matrix):
+def get_drivable_area_in_1D(segmentation_matrix, current_width, current_height):
 
     # discretized_matrix = discretize_width(segmentation_matrix)
     # polygon_coords = convert_seg_to_arr(discretized_matrix)
 
     polygon_coords = convert_seg_to_arr(segmentation_matrix)
     print(f"len(polygon_coords) {len(polygon_coords)}")
+    # print(f"polygon_coords {polygon_coords}")
+
     # Separate x and y coordinates
     x_values = [coord[0] for coord in polygon_coords]
     y_values = [coord[1] for coord in polygon_coords]
@@ -286,13 +292,14 @@ def get_drivable_area_in_1D(segmentation_matrix):
     # Add labels and a legend
     plt.xlabel('X-coordinate')
     plt.ylabel('Y-coordinate')
-    print(f"filtered_polygon_coords.shape {len(filtered_polygon_coords)}")
+    # print(f"filtered_polygon_coords.shape {len(filtered_polygon_coords)}")
     # plt.figure(figsize=(8, 4))
     # plt.plot(filtered_polygon_coords, label="remove_bottom_edge")
     plt.savefig(os.path.join("visualizations/remove_bottom_edge", f"sample.png"))
     plt.close()
-    
-    updated_coords = fill_missing_coords(filtered_polygon_coords, segmentation_matrix.shape[1], segmentation_matrix.shape[0])
+
+    # updated_coords = fill_missing_coords(filtered_polygon_coords, segmentation_matrix.shape[1], segmentation_matrix.shape[0])
+    updated_coords= fill_missing_coords(filtered_polygon_coords, current_width, current_height)
     x_values = [coord[0] for coord in updated_coords]
     y_values = [coord[1] for coord in updated_coords]
      # Create a scatter plot
@@ -695,6 +702,23 @@ def remove_bottom_edge(polygon_coords):
     filtered_polygon_coords = [(x, y) for x, y in polygon_coords if y == max_y_values[x]]
     return filtered_polygon_coords
 
+def random_sample(coordinates, n_sample):
+    return random.sample(coordinates, n_sample)
+
+def farthest_points(coords, num_points):
+    selected = [coords[0]]
+    while len(selected) < num_points:
+        max_dist = -1
+        farthest_point = None
+        for coord in coords:
+            if coord not in selected:
+                min_dist = min(euclidean(coord, s) for s in selected)
+                if min_dist > max_dist:
+                    max_dist = min_dist
+                    farthest_point = coord
+        selected.append(farthest_point)
+    return selected
+
 def fill_missing_coords(filtered_polygon_coords, max_x, max_y):
     # Sort the coordinates by X coordinates
     sorted_coords = sorted(filtered_polygon_coords, key=lambda coord: coord[0])
@@ -714,8 +738,15 @@ def fill_missing_coords(filtered_polygon_coords, max_x, max_y):
         else:
             # If the x-value is missing, add a new coordinate with y=360
             updated_coords.append([x, 0])
+    desired_width = math.floor(max_x / 100) * 100
+    desired_height = (desired_width/max_x)*max_y
+    print(f"current_width, desired_width {max_x, desired_width}")
 
-    return updated_coords
+    sampled_coordinates = random_sample(updated_coords, desired_width)
+
+    print(f"len(sampled_coordinates) {len(sampled_coordinates)}")
+    print(f"len(updated_coords) {len(updated_coords)}")
+    return sampled_coordinates
 
 
 # def get_1D_arr(polygon_coords, arr_size, max_y):
