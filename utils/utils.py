@@ -218,7 +218,7 @@ def show_seg_result(img, result, palette=None,is_demo=False, edge_thickness=3):
     color_seg = color_seg[..., ::-1]
     # print(color_seg.shape)
     color_mask = np.mean(color_seg, 2)
-    img[color_mask != 0] = img[color_mask != 0] * 0.5 + color_seg[color_mask != 0] * 0.5
+    # img[color_mask != 0] = img[color_mask != 0] * 0.5 + color_seg[color_mask != 0] * 0.5
     # img = img * 0.5 + color_seg * 0.5
     #img = img.astype(np.uint8)
     #img = cv2.resize(img, (1280,720), interpolation=cv2.INTER_LINEAR)
@@ -498,6 +498,7 @@ class LoadImages:  # for inference
         self.img_size = img_size//2
         self.stride = stride
         self.files = images + videos
+        self.filename = ""
         self.nf = ni + nv  # number of files
         self.video_flag = [False] * ni + [True] * nv
         self.mode = 'image'
@@ -516,6 +517,7 @@ class LoadImages:  # for inference
         if self.count == self.nf:
             raise StopIteration
         path = self.files[self.count]
+        self.filename = os.path.splitext(os.path.basename(path))[0]
 
         if self.video_flag[self.count]:
             # Read video
@@ -560,6 +562,10 @@ class LoadImages:  # for inference
 
     def __len__(self):
         return self.nf  # number of files
+    
+    def getFileNames(self):
+        file_names = [os.path.splitext(os.path.basename(path))[0] for path in self.files]
+        return file_names
 
 def letterbox(img, new_shape=(640, 640), color=(114, 114, 114), auto=True, scaleFill=False, scaleup=True, stride=32):
     # Resize and pad image while meeting stride-multiple constraints
