@@ -173,10 +173,10 @@ def detect():
                         vid_writer = cv2.VideoWriter(save_path, cv2.VideoWriter_fourcc(*'mp4v'), fps, (w, h))
                     vid_writer.write(im0)
             
-            if frame == 10:
-                break_loop=True
-        if break_loop:
-            break 
+        #     if frame == 10:
+        #         break_loop=True
+        # if break_loop:
+        #     break 
 
     for i in range(len(prev_frames) - 15):  # Iterate through all frames except the last 15
         prev_10_frames.append(prev_frames[i:i+10])
