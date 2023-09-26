@@ -72,6 +72,7 @@ def detect():
     prev_frames = []
     prev_10_frames = []
     next_5_frames = []
+    break_loop = False
     
     # Run inference
     if device.type != 'cpu':
@@ -171,15 +172,24 @@ def detect():
                             save_path += '.mp4'
                         vid_writer = cv2.VideoWriter(save_path, cv2.VideoWriter_fourcc(*'mp4v'), fps, (w, h))
                     vid_writer.write(im0)
+            
+            if frame == 10:
+                break_loop=True
         if break_loop:
             break 
+
     for i in range(len(prev_frames) - 15):  # Iterate through all frames except the last 15
         prev_10_frames.append(prev_frames[i:i+10])
         next_5_frames.append(prev_frames[i+10:i+15])
-
+    
     # Convert prev_10_frames and next_5_frames into tensors
     X = np.array(prev_10_frames)  # X.shape = (n, 10, 100)
     y = np.array(next_5_frames)   # y.shape = (n, 5, 100)
+
+    filename = dataset.filename
+    np.save(f'train_data/X_{filename}.npy', X)
+    np.save(f'train_data/y_{filename}.npy', y)
+
 
     # np.save('train_data/X.npy', X)
     # np.save('train_data/y.npy', y)
