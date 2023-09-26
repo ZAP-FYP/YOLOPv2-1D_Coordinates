@@ -103,12 +103,13 @@ def detect():
 
         da_seg_mask = driving_area_mask(seg)
         # ll_seg_mask = lane_line_mask(ll)
-
+        break_loop = False
         # Process detections
         for i, det in enumerate(pred):  # detections per image
 
             p, s, im0, frame = path, '', im0s, getattr(dataset, 'frame', 0)
-
+            # if frame==50:
+            #     break_loop = True
             # print("frame", frame)
 
             p = Path(p)  # to Path
@@ -139,11 +140,11 @@ def detect():
             # Print time (inference)
             print(f'{s}Done. ({t2 - t1:.3f}s)')
             # show_seg_result(im0, (da_seg_mask,ll_seg_mask), is_demo=True)
-            polygon_segmentation = show_seg_result(im0, ([da_seg_mask]), is_demo=True)
-            frame_1D_arr = get_drivable_area_in_1D(polygon_segmentation)
+            polygon_segmentation, current_width, current_height = show_seg_result(im0, ([da_seg_mask]), is_demo=True)
+            frame_1D_arr = get_drivable_area_in_1D(polygon_segmentation, current_width, current_height)
             
 
-            print(frame_1D_arr)
+            # print(frame_1D_arr)
             prev_frames.append(frame_1D_arr)
             
             max_length = max(len(frame) for frame in prev_frames)
@@ -170,7 +171,8 @@ def detect():
                             save_path += '.mp4'
                         vid_writer = cv2.VideoWriter(save_path, cv2.VideoWriter_fourcc(*'mp4v'), fps, (w, h))
                     vid_writer.write(im0)
-
+        if break_loop:
+            break 
     for i in range(len(prev_frames) - 15):  # Iterate through all frames except the last 15
         prev_10_frames.append(prev_frames[i:i+10])
         next_5_frames.append(prev_frames[i+10:i+15])
@@ -179,8 +181,8 @@ def detect():
     X = np.array(prev_10_frames)  # X.shape = (n, 10, 100)
     y = np.array(next_5_frames)   # y.shape = (n, 5, 100)
 
-    np.save('train_data/X.npy', X)
-    np.save('train_data/y.npy', y)
+    # np.save('train_data/X.npy', X)
+    # np.save('train_data/y.npy', y)
     # X = np.random.rand(500, 10, 100)
     # y = np.random.rand(500, 5, 100)
 
