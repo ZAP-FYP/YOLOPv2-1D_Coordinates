@@ -260,6 +260,10 @@ def get_drivable_area_in_1D(segmentation_matrix, current_width, current_height):
 
     polygon_coords = convert_seg_to_arr(segmentation_matrix)
     print(f"len(polygon_coords) {len(polygon_coords)}")
+    if len(polygon_coords) == 0:
+        polygon_coords = [(i, 0) for i in range(current_width + 1)]
+        print(f"empty len(polygon_coords) {len(polygon_coords)}")
+
     # print(f"polygon_coords {polygon_coords}")
 
     # Separate x and y coordinates
@@ -722,8 +726,9 @@ def farthest_points(coords, num_points):
 
 def fill_missing_coords(filtered_polygon_coords, max_x, max_y):
     # Sort the coordinates by X coordinates
+
     sorted_coords = sorted(filtered_polygon_coords, key=lambda coord: coord[0])
-    print(f"sorted_coords[0], filtered_polygon_coords[0]  {sorted_coords[0], filtered_polygon_coords[0]}")
+    # print(f"sorted_coords[0], filtered_polygon_coords[0]  {sorted_coords[0], filtered_polygon_coords[0]}")
 
     # Create a set of existing x-values for faster lookup
     existing_x_values = set(coord[0] for coord in sorted_coords)
