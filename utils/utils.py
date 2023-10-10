@@ -220,7 +220,7 @@ def show_seg_result(img, result, palette=None,is_demo=False, edge_thickness=3):
     color_seg = color_seg[..., ::-1]
     # print(color_seg.shape)
     color_mask = np.mean(color_seg, 2)
-    img[color_mask != 0] = img[color_mask != 0] * 0.5 + color_seg[color_mask != 0] * 0.5
+    # img[color_mask != 0] = img[color_mask != 0] * 0.5 + color_seg[color_mask != 0] * 0.5
     # img = img * 0.5 + color_seg * 0.5
     #img = img.astype(np.uint8)
     #img = cv2.resize(img, (1280,720), interpolation=cv2.INTER_LINEAR)
@@ -703,6 +703,7 @@ def remove_bottom_edge(polygon_coords):
     return filtered_polygon_coords
 
 def random_sample(coordinates, n_sample):
+    print(f"coordinates length {len(coordinates)} n_sample {n_sample}")
     return random.sample(coordinates, n_sample)
 
 def farthest_points(coords, num_points):
@@ -730,7 +731,9 @@ def fill_missing_coords(filtered_polygon_coords, max_x, max_y):
     # Initialize the list to store the updated coordinates
     updated_coords = []
     print(f"sorted_coords[0][0], max_x {sorted_coords[0][0], max_x}")
-    for x in range(sorted_coords[0][0], max_x):
+    # for x in range(sorted_coords[0][0], max_x):
+    for x in range(0, max_x):
+
         if x in existing_x_values:
             # If the x-value exists in your sorted list, keep the original coordinate
             y_value = next(coord[1] for coord in sorted_coords if coord[0] == x)
@@ -746,7 +749,7 @@ def fill_missing_coords(filtered_polygon_coords, max_x, max_y):
 
     print(f"len(sampled_coordinates) {len(sampled_coordinates)}")
     print(f"len(updated_coords) {len(updated_coords)}")
-    return sampled_coordinates
+    return sampled_coordinates 
 
 
 # def get_1D_arr(polygon_coords, arr_size, max_y):

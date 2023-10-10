@@ -46,7 +46,7 @@ def detect():
     # setting and directories
     source, weights,  save_txt, imgsz = opt.source, opt.weights,  opt.save_txt, opt.img_size
     save_img = not opt.nosave and not source.endswith('.txt')  # save inference images
-
+    file_name = list(source.split("/"))[-1]
     save_dir = Path(increment_path(Path(opt.project) / opt.name, exist_ok=opt.exist_ok))  # increment run
     (save_dir / 'labels' if save_txt else save_dir).mkdir(parents=True, exist_ok=True)  # make dir
 
@@ -181,8 +181,8 @@ def detect():
     X = np.array(prev_10_frames)  # X.shape = (n, 10, 100)
     y = np.array(next_5_frames)   # y.shape = (n, 5, 100)
 
-    # np.save('train_data/X.npy', X)
-    # np.save('train_data/y.npy', y)
+    np.save(f'train_data/{file_name}X.npy', X)
+    np.save(f'train_data/{file_name}y.npy', y)
     # X = np.random.rand(500, 10, 100)
     # y = np.random.rand(500, 5, 100)
 
