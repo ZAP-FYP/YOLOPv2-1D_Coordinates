@@ -319,10 +319,23 @@ def get_drivable_area_in_1D(segmentation_matrix, current_width, current_height):
     plt.close()
 
     width_N = len(updated_coords) // 100
-    print(len(updated_coords))
-    print(width_N)
-    discretized_coords = updated_coords[::width_N]
-    print(len(discretized_coords))
+    # print(len(updated_coords))
+    # print(width_N)
+    # skipped_y = updated_coords[::width_N]
+    # print("skipped array", skipped_y)
+
+    discretized_coords = []
+
+    for i in range(0, len(updated_coords), width_N):
+        chunk = updated_coords[i:i + width_N]
+        mean_y = int(round(np.mean([y for _, y in chunk])))
+        x_coordinates = [x for x, _ in chunk]
+        # median_x = x_coordinates[width_N]
+        median_x = int(round(np.median(x_coordinates)))  
+        discretized_coords.append((median_x, mean_y))
+    
+    print("mean array:", discretized_coords)
+
 
     y_coords = [coord[1] for coord in discretized_coords]
 
