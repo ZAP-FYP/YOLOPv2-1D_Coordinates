@@ -751,10 +751,13 @@ def fill_missing_coords(filtered_polygon_coords, max_x, max_y):
     print(f"current_width, desired_width {max_x, desired_width}")
 
     sampled_coordinates = random_sample(updated_coords, desired_width)
+    sorted_sampled_coords = sorted(sampled_coordinates, key=lambda coord: coord[0])
 
     print(f"len(sampled_coordinates) {len(sampled_coordinates)}")
     print(f"len(updated_coords) {len(updated_coords)}")
-    return sampled_coordinates 
+    print(f"len(sorted_sampled_coords) {len(sorted_sampled_coords)}")
+
+    return sorted_sampled_coords 
 
 
 # def get_1D_arr(polygon_coords, arr_size, max_y):
