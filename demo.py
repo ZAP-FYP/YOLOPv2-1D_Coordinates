@@ -171,6 +171,9 @@ def detect():
                             save_path += '.mp4'
                         vid_writer = cv2.VideoWriter(save_path, cv2.VideoWriter_fourcc(*'mp4v'), fps, (w, h))
                     vid_writer.write(im0)
+
+            # if frame == 50:
+            #     break_loop = True
         if break_loop:
             break 
     for i in range(len(prev_frames) - 15):  # Iterate through all frames except the last 15
@@ -181,8 +184,8 @@ def detect():
     X = np.array(prev_10_frames)  # X.shape = (n, 10, 100)
     y = np.array(next_5_frames)   # y.shape = (n, 5, 100)
 
-    np.save(f'train_data/{file_name}X.npy', X)
-    np.save(f'train_data/{file_name}y.npy', y)
+    np.save(f'train_data/{dataset.filename}X.npy', X)
+    np.save(f'train_data/{dataset.filename}y.npy', y)
     # X = np.random.rand(500, 10, 100)
     # y = np.random.rand(500, 5, 100)
 
