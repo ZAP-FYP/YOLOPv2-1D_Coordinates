@@ -72,6 +72,7 @@ def detect():
     prev_frames = []
     prev_10_frames = []
     next_5_frames = []
+    all_frames = []
     
     # Run inference
     if device.type != 'cpu':
@@ -146,6 +147,7 @@ def detect():
 
             # print(frame_1D_arr)
             prev_frames.append(frame_1D_arr)
+            all_frames.append(frame_1D_arr)
             
             max_length = max(len(frame) for frame in prev_frames)
             prev_frames = [[f if f != 0 else 0 for f in frame] + [0] * (max_length - len(frame)) for frame in prev_frames]
@@ -176,6 +178,7 @@ def detect():
             #     break_loop = True
         if break_loop:
             break 
+
     for i in range(len(prev_frames) - 15):  # Iterate through all frames except the last 15
         prev_10_frames.append(prev_frames[i:i+10])
         next_5_frames.append(prev_frames[i+10:i+15])
@@ -188,6 +191,10 @@ def detect():
     np.save(f'train_data/{dataset.filename}y.npy', y)
     # X = np.random.rand(500, 10, 100)
     # y = np.random.rand(500, 5, 100)
+
+    print("length of numpy file:", len(all_frames))
+    print("contents of numpy file:", all_frames)
+    np.save("frame_coordinates.npy", all_frames)
 
 if __name__ == '__main__':
     opt =  make_parser().parse_args()
