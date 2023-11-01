@@ -3,7 +3,9 @@ data/
 data
 runs
 visualizations
+train_data
 *.jpg
+blob/4f87d4cb5d93ab4637bf7fe4d8c4e1d3c4254b94/.DS_Store
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

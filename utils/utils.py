@@ -220,7 +220,7 @@ def show_seg_result(img, result, palette=None,is_demo=False, edge_thickness=3):
     color_seg = color_seg[..., ::-1]
     # print(color_seg.shape)
     color_mask = np.mean(color_seg, 2)
-    img[color_mask != 0] = img[color_mask != 0] * 0.5 + color_seg[color_mask != 0] * 0.5
+    # img[color_mask != 0] = img[color_mask != 0] * 0.5 + color_seg[color_mask != 0] * 0.5
     # img = img * 0.5 + color_seg * 0.5
     #img = img.astype(np.uint8)
     #img = cv2.resize(img, (1280,720), interpolation=cv2.INTER_LINEAR)
@@ -260,6 +260,10 @@ def get_drivable_area_in_1D(segmentation_matrix, current_width, current_height):
 
     polygon_coords = convert_seg_to_arr(segmentation_matrix)
     print(f"len(polygon_coords) {len(polygon_coords)}")
+    if len(polygon_coords) == 0:
+        polygon_coords = [(i, 0) for i in range(current_width + 1)]
+        print(f"empty len(polygon_coords) {len(polygon_coords)}")
+
     # print(f"polygon_coords {polygon_coords}")
 
     # Separate x and y coordinates
@@ -315,10 +319,20 @@ def get_drivable_area_in_1D(segmentation_matrix, current_width, current_height):
     plt.close()
 
     width_N = len(updated_coords) // 100
-    print(len(updated_coords))
-    print(width_N)
-    discretized_coords = updated_coords[::width_N]
-    print(len(discretized_coords))
+    # print(len(updated_coords))
+    # print(width_N)
+    # skipped_y = updated_coords[::width_N]
+    # print("skipped array", skipped_y)
+
+    discretized_coords = []
+
+    for i in range(0, len(updated_coords), width_N):
+        chunk = updated_coords[i:i + width_N]
+        mean_y = int(round(np.mean([y for _, y in chunk])))
+        x_coordinates = [x for x, _ in chunk]
+        # median_x = x_coordinates[width_N]
+        median_x = int(round(np.median(x_coordinates)))  
+        discretized_coords.append((median_x, mean_y))
 
     y_coords = [coord[1] for coord in discretized_coords]
 
@@ -539,6 +553,7 @@ class LoadImages:  # for inference
         self.img_size = img_size//2
         self.stride = stride
         self.files = images + videos
+        self.filename = ''
         self.nf = ni + nv  # number of files
         self.video_flag = [False] * ni + [True] * nv
         self.mode = 'image'
@@ -557,6 +572,7 @@ class LoadImages:  # for inference
         if self.count == self.nf:
             raise StopIteration
         path = self.files[self.count]
+        self.filename = os.path.splitext(os.path.basename(path))[0]
 
         if self.video_flag[self.count]:
             # Read video
@@ -703,6 +719,7 @@ def remove_bottom_edge(polygon_coords):
     return filtered_polygon_coords
 
 def random_sample(coordinates, n_sample):
+    print(f"coordinates length {len(coordinates)} n_sample {n_sample}")
     return random.sample(coordinates, n_sample)
 
 def farthest_points(coords, num_points):
@@ -721,8 +738,9 @@ def farthest_points(coords, num_points):
 
 def fill_missing_coords(filtered_polygon_coords, max_x, max_y):
     # Sort the coordinates by X coordinates
+
     sorted_coords = sorted(filtered_polygon_coords, key=lambda coord: coord[0])
-    print(f"sorted_coords[0], filtered_polygon_coords[0]  {sorted_coords[0], filtered_polygon_coords[0]}")
+    # print(f"sorted_coords[0], filtered_polygon_coords[0]  {sorted_coords[0], filtered_polygon_coords[0]}")
 
     # Create a set of existing x-values for faster lookup
     existing_x_values = set(coord[0] for coord in sorted_coords)
@@ -730,7 +748,9 @@ def fill_missing_coords(filtered_polygon_coords, max_x, max_y):
     # Initialize the list to store the updated coordinates
     updated_coords = []
     print(f"sorted_coords[0][0], max_x {sorted_coords[0][0], max_x}")
-    for x in range(sorted_coords[0][0], max_x):
+    # for x in range(sorted_coords[0][0], max_x):
+    for x in range(0, max_x):
+
         if x in existing_x_values:
             # If the x-value exists in your sorted list, keep the original coordinate
             y_value = next(coord[1] for coord in sorted_coords if coord[0] == x)
@@ -743,10 +763,13 @@ def fill_missing_coords(filtered_polygon_coords, max_x, max_y):
     print(f"current_width, desired_width {max_x, desired_width}")
 
     sampled_coordinates = random_sample(updated_coords, desired_width)
+    sorted_sampled_coords = sorted(sampled_coordinates, key=lambda coord: coord[0])
 
     print(f"len(sampled_coordinates) {len(sampled_coordinates)}")
     print(f"len(updated_coords) {len(updated_coords)}")
-    return sampled_coordinates
+    print(f"len(sorted_sampled_coords) {len(sorted_sampled_coords)}")
+
+    return sorted_sampled_coords 
 
 
 # def get_1D_arr(polygon_coords, arr_size, max_y):
