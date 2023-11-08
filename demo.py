@@ -184,17 +184,17 @@ def detect():
         next_5_frames.append(prev_frames[i+10:i+15])
 
     # Convert prev_10_frames and next_5_frames into tensors
-    X = np.array(prev_10_frames)  # X.shape = (n, 10, 100)
-    y = np.array(next_5_frames)   # y.shape = (n, 5, 100)
+    # X = np.array(prev_10_frames)  # X.shape = (n, 10, 100)
+    # y = np.array(next_5_frames)   # y.shape = (n, 5, 100)
 
-    np.save(f'train_data/{dataset.filename}X.npy', X)
-    np.save(f'train_data/{dataset.filename}y.npy', y)
+    # np.save(f'train_data/{dataset.filename}X.npy', X)
+    # np.save(f'train_data/{dataset.filename}y.npy', y)
     # X = np.random.rand(500, 10, 100)
     # y = np.random.rand(500, 5, 100)
 
     print("length of numpy file:", len(all_frames))
     print("contents of numpy file:", all_frames)
-    np.save("frame_coordinates.npy", all_frames)
+    np.save(f"frame_coordinates_{dataset.filename}.npy", all_frames)
 
 if __name__ == '__main__':
     opt =  make_parser().parse_args()
