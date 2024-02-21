@@ -194,7 +194,7 @@ def detect():
 
     print("length of numpy file:", len(all_frames))
     print("contents of numpy file:", all_frames)
-    np.save(f"frame_coordinates_{dataset.filename}.npy", all_frames)
+    np.save(f"data_npy/BDD/frame_coordinates_{dataset.filename}.npy", all_frames)
 
 if __name__ == '__main__':
     opt =  make_parser().parse_args()
