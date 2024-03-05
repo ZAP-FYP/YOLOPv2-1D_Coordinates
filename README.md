@@ -1,5 +1,6 @@
 Video splitting - ffmpeg -i data/zafra-videos/IMG_0263.MOV -c copy -map 0 -segment_time 30 -f segment data/videos-long/chunks/IMG_0263.MOV/output_video_%03d.mp4
 Start segmentation - python demo.py  --source data/example.jpg --device cpu
+bdd kaggle.josn {"username":"uom190055f","key":"11a39bb923bb951f08f52f78167605ab"}
 <div align="center">
 <h1> YOLOPv2:rocket:: Better, Faster, Stronger for Panoptic driving Perception </h1>
 <!-- <--!span><font size="5", > Efficient and Robust 2D-to-BEV Representation Learning via Geometry-guided Kernel Transformer
