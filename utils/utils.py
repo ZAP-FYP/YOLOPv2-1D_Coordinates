@@ -722,6 +722,13 @@ def random_sample(coordinates, n_sample):
     print(f"coordinates length {len(coordinates)} n_sample {n_sample}")
     return random.sample(coordinates, n_sample)
 
+def regular_sample(coordinates, n_sample):
+    
+    step = len(coordinates) // n_sample
+    sampled_indices = [i * step for i in range(n_sample)]
+    sampled_elements = [coordinates[i] for i in sampled_indices]
+    return sampled_elements
+
 def farthest_points(coords, num_points):
     selected = [coords[0]]
     while len(selected) < num_points:
@@ -762,7 +769,8 @@ def fill_missing_coords(filtered_polygon_coords, max_x, max_y):
     desired_height = (desired_width/max_x)*max_y
     print(f"current_width, desired_width {max_x, desired_width}")
 
-    sampled_coordinates = random_sample(updated_coords, desired_width)
+    sampled_coordinates = regular_sample(updated_coords, 100)
+    
     sorted_sampled_coords = sorted(sampled_coordinates, key=lambda coord: coord[0])
 
     print(f"len(sampled_coordinates) {len(sampled_coordinates)}")
