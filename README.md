@@ -3,6 +3,21 @@ Start segmentation - python demo.py  --source data/example.jpg --device cpu
 bdd kaggle.josn {"username":"uom190055f","key":"11a39bb923bb951f08f52f78167605ab"}
 {"username":"uom190055f","key":"f356d3e522ef48d6f7b6704a8bb747ae"}
 model weights https://drive.google.com/file/d/1ggqh1Wc1T9zY4zN9BY4p-mTyq_dDtdEv/view?usp=sharing
+
+To install Chrome:
+
+download it using this command: wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+
+execute the downloaded installer: sudo apt install ./google-chrome-stable_current_amd64.deb
+
+launch the browser: google-chrome
+
+Later, I decided to make the default browser icon to launch google chrome, so I followed Grant Curell's answer, basically:
+
+run xfce4-settings-manager
+find "Preferred Applications"
+under "Web Browser", click "Other..."
+type in /usr/bin/google-chrome
 <div align="center">
 <h1> YOLOPv2:rocket:: Better, Faster, Stronger for Panoptic driving Perception </h1>
 <!-- <--!span><font size="5", > Efficient and Robust 2D-to-BEV Representation Learning via Geometry-guided Kernel Transformer
