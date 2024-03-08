@@ -1,6 +1,7 @@
 Video splitting - ffmpeg -i data/zafra-videos/IMG_0263.MOV -c copy -map 0 -segment_time 30 -f segment data/videos-long/chunks/IMG_0263.MOV/output_video_%03d.mp4
 Start segmentation - python demo.py  --source data/example.jpg --device cpu
 bdd kaggle.josn {"username":"uom190055f","key":"11a39bb923bb951f08f52f78167605ab"}
+{"username":"uom190055f","key":"f356d3e522ef48d6f7b6704a8bb747ae"}
 model weights https://drive.google.com/file/d/1ggqh1Wc1T9zY4zN9BY4p-mTyq_dDtdEv/view?usp=sharing
 <div align="center">
 <h1> YOLOPv2:rocket:: Better, Faster, Stronger for Panoptic driving Perception </h1>
