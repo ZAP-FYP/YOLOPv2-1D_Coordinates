@@ -20,6 +20,7 @@ under "Web Browser", click "Other..."
 type in /usr/bin/google-chrome
 
 Drive folder FYP link https://drive.google.com/drive/folders/14tARLTnBGZKw-40RXfvOdeDGFLDtzx5M?usp=sharing
+DMS https://dms.uom.lk/s/HJmKfQgnB8LfyrW
 <div align="center">
 <h1> YOLOPv2:rocket:: Better, Faster, Stronger for Panoptic driving Perception </h1>
 <!-- <--!span><font size="5", > Efficient and Robust 2D-to-BEV Representation Learning via Geometry-guided Kernel Transformer
