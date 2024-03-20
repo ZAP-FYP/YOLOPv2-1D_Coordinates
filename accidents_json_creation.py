@@ -3,7 +3,7 @@ import os
 import numpy as np
 
 # Function to process a single JSON file
-def process_json_file(json_file_path):
+def process_json_file(json_file_path, video_id):
     # Load original JSON file
     with open(json_file_path) as f:
         original_data = json.load(f)
@@ -27,7 +27,7 @@ def process_json_file(json_file_path):
         # Check if the frame is within anomaly range or 30 frames ahead
         if frame_id in frames_to_label:
             # Load numpy file and extract coordinates
-            numpy_file_path = f'separate_numpy_for_eachimage/u33fdjUY_Iw_004735/images/{frame_id:06d}.npy'
+            numpy_file_path = f'separate_numpy_for_eachimage/{video_id}/images/{frame_id:06d}.npy'
             if os.path.exists(numpy_file_path):
                 numpy_data = np.load(numpy_file_path)
                 # Append coordinates to the new JSON data
@@ -41,7 +41,7 @@ def process_json_file(json_file_path):
                 print(f"Warning: Numpy file not found for frame {frame_id}. Skipping.")
         else:
             # Append coordinates with normal label (0)
-            numpy_file_path = f'separate_numpy_for_eachimage/u33fdjUY_Iw_004735/images/{frame_id:06d}.npy'
+            numpy_file_path = f'separate_numpy_for_eachimage/{video_id}/images/{frame_id:06d}.npy'
             if os.path.exists(numpy_file_path):
                 numpy_data = np.load(numpy_file_path)
                 # Append coordinates with normal label (0) and numpy coordinates
@@ -55,19 +55,21 @@ def process_json_file(json_file_path):
                 print(f"Warning: Numpy file not found for frame {frame_id}. Skipping.")
 
     # Write new JSON data to a file
-    output_dir = 'json'  # Specify your desired output directory
+    output_dir = 'ego_accidents_labelled'  # Specify your desired output directory
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
     output_filename = os.path.basename(json_file_path).replace('.json', '_with_numpy.json')
     output_path = os.path.join(output_dir, output_filename)
 
-    with open(output_path, 'w') as f:
-        json.dump(new_json_data, f, indent=4)
+    if new_json_data:
+        with open(output_path, 'w') as f:
+            json.dump(new_json_data, f, indent=4)
 
-    print(f"New JSON file '{output_filename}' with numpy coordinates created successfully.")
+        print(f"New JSON file '{output_filename}' with numpy coordinates created successfully.")
 
-# Iterate through each JSON file in the directory
-input_dir = 'DoTA_annotations'
+input_dir = 'DoTA_ego_annotations'
 for filename in os.listdir(input_dir):
     if filename.endswith('.json'):
         json_file_path = os.path.join(input_dir, filename)
-        process_json_file(json_file_path)
+        process_json_file(json_file_path, os.path.splitext(filename)[0])
 print("All JSON files processed successfully.")
