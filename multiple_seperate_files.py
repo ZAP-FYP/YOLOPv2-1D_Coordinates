@@ -1,7 +1,9 @@
 import os
 import subprocess
 # Directory containing the video files
-video_folder = "data/videos-long/chunks/IMG_0251.MOV"
+# video_folder = "data/videos-long/chunks/IMG_0251.MOV"
+video_folder = "DoTA_ego_videos"
+
 
 # Get a list of all files in the directory
 video_files = os.listdir(video_folder)
@@ -12,7 +14,7 @@ video_files = os.listdir(video_folder)
 # Construct the commands list
 commands = []
 for file in video_files:
-    source = os.path.join(video_folder, file)
+    source = os.path.join(video_folder, file, "images")
     command = f"python demo.py --source {source} --device cpu"
 
     commands.append(command)

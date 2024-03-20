@@ -116,6 +116,7 @@ def detect():
 
             p = Path(p)  # to Path
             save_path = str(save_dir / p.name)  # img.jpg
+            print(source)
             txt_path = str(save_dir / 'labels' / p.stem) + ('' if dataset.mode == 'image' else f'_{frame}')  # img.txt
             s += '%gx%g ' % img.shape[2:]  # print string
             gn = torch.tensor(im0.shape)[[1, 0, 1, 0]]  # normalization gain whwh
@@ -144,7 +145,8 @@ def detect():
             # show_seg_result(im0, (da_seg_mask,ll_seg_mask), is_demo=True)
             polygon_segmentation, current_width, current_height = show_seg_result(im0, ([da_seg_mask]), is_demo=True)
             frame_1D_arr = get_drivable_area_in_1D(polygon_segmentation, current_width, current_height)
-            
+            os.makedirs(f"separate_numpy_for_eachimage/{source.split('DoTA_ego_videos/')[1]}", exist_ok=True)
+            np.save(f"separate_numpy_for_eachimage/{source.split('DoTA_ego_videos/')[1]}/{dataset.filename}.npy", frame_1D_arr)
 
             # print(frame_1D_arr)
             # prev_frames.append(frame_1D_arr)
@@ -198,7 +200,8 @@ def detect():
         print("dataset.filename", dataset.filename)
         print("file_name",file_name)
         print("saving...............")
-        np.save(f"train_data/frame_coordinates_{dataset.filename}.npy", all_frames)
+        # os.makedirs(f"train_data/{source.split('DoTA_ego_videos/')[1]}", exist_ok=True)
+        # np.save(f"train_data/{source.split('DoTA_ego_videos/')[1]}/{dataset.filename}.npy", all_frames)
 
 if __name__ == '__main__':
     opt =  make_parser().parse_args()
