@@ -20,6 +20,8 @@ under "Web Browser", click "Other..."
 type in /usr/bin/google-chrome
 
 Drive folder FYP link https://drive.google.com/drive/folders/14tARLTnBGZKw-40RXfvOdeDGFLDtzx5M?usp=sharing
+
+Regular sampling https://drive.google.com/file/d/1oUCwcqInKR5KcQh1lDvIJQLLnXV5kA60/view?usp=sharing
 DMS https://dms.uom.lk/s/HJmKfQgnB8LfyrW
 <div align="center">
 <h1> YOLOPv2:rocket:: Better, Faster, Stronger for Panoptic driving Perception </h1>
