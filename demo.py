@@ -144,38 +144,39 @@ def detect():
             print(f'{s}Done. ({t2 - t1:.3f}s)')
             # show_seg_result(im0, (da_seg_mask,ll_seg_mask), is_demo=True)
             polygon_segmentation, current_width, current_height = show_seg_result(im0, ([da_seg_mask]), is_demo=True)
-            frame_1D_arr = get_drivable_area_in_1D(polygon_segmentation, current_width, current_height)
-            os.makedirs(f"separate_numpy_for_eachimage/{source.split('DoTA_ego_videos/')[1]}", exist_ok=True)
-            np.save(f"separate_numpy_for_eachimage/{source.split('DoTA_ego_videos/')[1]}/{dataset.filename}.npy", frame_1D_arr)
+            # frame_1D_arr = get_drivable_area_in_1D(polygon_segmentation, current_width, current_height)
+            # os.makedirs(f"separate_numpy_for_eachimage/{source.split('DoTA_ego_videos/')[1]}", exist_ok=True)
+            # np.save(f"separate_numpy_for_eachimage/{source.split('DoTA_ego_videos/')[1]}/{dataset.filename}.npy", frame_1D_arr)
 
             # print(frame_1D_arr)
             # prev_frames.append(frame_1D_arr)
-            all_frames.append(frame_1D_arr)
-            
+            # all_frames.append(frame_1D_arr)
+            all_frames.append(polygon_segmentation)
+
             # max_length = max(len(frame) for frame in prev_frames)
             # prev_frames = [[f if f != 0 else 0 for f in frame] + [0] * (max_length - len(frame)) for frame in prev_frames]
             # print("frame", prev_frames)
 
             # Save results (image with detections)
-            if save_img:
-                if dataset.mode == 'image':
-                    cv2.imwrite(save_path, im0)
-                    print(f" The image with the result is saved in: {save_path}")
-                else:  # 'video' or 'stream'
-                    if vid_path != save_path:  # new video
-                        vid_path = save_path
-                        if isinstance(vid_writer, cv2.VideoWriter):
-                            vid_writer.release()  # release previous video writer
-                        if vid_cap:  # video
-                            fps = vid_cap.get(cv2.CAP_PROP_FPS)
-                            #w = int(vid_cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-                            #h = int(vid_cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-                            w,h = im0.shape[1], im0.shape[0]
-                        else:  # stream
-                            fps, w, h = 30, im0.shape[1], im0.shape[0]
-                            save_path += '.mp4'
-                        vid_writer = cv2.VideoWriter(save_path, cv2.VideoWriter_fourcc(*'mp4v'), fps, (w, h))
-                    vid_writer.write(im0)
+            # if save_img:
+            #     if dataset.mode == 'image':
+            #         cv2.imwrite(save_path, im0)
+            #         print(f" The image with the result is saved in: {save_path}")
+            #     else:  # 'video' or 'stream'
+            #         if vid_path != save_path:  # new video
+            #             vid_path = save_path
+            #             if isinstance(vid_writer, cv2.VideoWriter):
+            #                 vid_writer.release()  # release previous video writer
+            #             if vid_cap:  # video
+            #                 fps = vid_cap.get(cv2.CAP_PROP_FPS)
+            #                 #w = int(vid_cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+            #                 #h = int(vid_cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+            #                 w,h = im0.shape[1], im0.shape[0]
+            #             else:  # stream
+            #                 fps, w, h = 30, im0.shape[1], im0.shape[0]
+            #                 save_path += '.mp4'
+            #             vid_writer = cv2.VideoWriter(save_path, cv2.VideoWriter_fourcc(*'mp4v'), fps, (w, h))
+            #         vid_writer.write(im0)
 
             # if frame == 50:
             #     break_loop = True
@@ -200,9 +201,9 @@ def detect():
         print("dataset.filename", dataset.filename)
         print("file_name",file_name)
         print("saving...............")
-        # os.makedirs(f"train_data/{source.split('DoTA_ego_videos/')[1]}", exist_ok=True)
-        # np.save(f"train_data/{source.split('DoTA_ego_videos/')[1]}/{dataset.filename}.npy", all_frames)
-
+        os.makedirs(f"train_data/2d_maps", exist_ok=True)
+        np.save(f"train_data/2d_maps/{dataset.filename}.npy", all_frames)
+        # print(np.load(f"train_data/2d_maps/{dataset.filename}.npy"))
 if __name__ == '__main__':
     opt =  make_parser().parse_args()
     print(opt)

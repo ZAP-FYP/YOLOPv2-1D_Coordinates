@@ -209,48 +209,48 @@ def show_seg_result(img, result, palette=None,is_demo=False, edge_thickness=3):
         # #-- This is realted to line detection color_area[result[1] ==1] = [255, 0, 0]
         # color_seg = color_area
         print(f"result222 {len(result[0][0]), len(result[0])}")
-        edge_pixels = cv2.Canny(result[0].astype(np.uint8), 0, 1)
+        # edge_pixels = cv2.Canny(result[0].astype(np.uint8), 0, 1)
 
         # print(get_drivable_area_in_1D(edge_pixels))
-        dilated_edges = cv2.dilate(edge_pixels, None, iterations=edge_thickness)
-        color_area[dilated_edges != 0] = [0, 255, 0]
-        color_seg = color_area
+        # dilated_edges = cv2.dilate(edge_pixels, None, iterations=edge_thickness)
+        # color_area[dilated_edges != 0] = [0, 255, 0]
+        # color_seg = color_area
 
     # convert to BGR
-    color_seg = color_seg[..., ::-1]
-    # print(color_seg.shape)
-    color_mask = np.mean(color_seg, 2)
-    # img[color_mask != 0] = img[color_mask != 0] * 0.5 + color_seg[color_mask != 0] * 0.5
-    # img = img * 0.5 + color_seg * 0.5
-    #img = img.astype(np.uint8)
-    #img = cv2.resize(img, (1280,720), interpolation=cv2.INTER_LINEAR)
-    # Define the new width (e.g., 600)
-    new_width = 600
+    # color_seg = color_seg[..., ::-1]
+    # # print(color_seg.shape)
+    # color_mask = np.mean(color_seg, 2)
+    # # img[color_mask != 0] = img[color_mask != 0] * 0.5 + color_seg[color_mask != 0] * 0.5
+    # # img = img * 0.5 + color_seg * 0.5
+    # #img = img.astype(np.uint8)
+    # #img = cv2.resize(img, (1280,720), interpolation=cv2.INTER_LINEAR)
+    # # Define the new width (e.g., 600)
+    # new_width = 600
 
-    # Calculate the scaling factor to maintain the aspect ratio
-    scale_factor = new_width / edge_pixels.shape[1]
-    current_width = edge_pixels.shape[1]
-    current_height = edge_pixels.shape[0]
+    # # Calculate the scaling factor to maintain the aspect ratio
+    # scale_factor = new_width / edge_pixels.shape[1]
+    # current_width = edge_pixels.shape[1]
+    # current_height = edge_pixels.shape[0]
 
-    # Calculate the new height
-    new_height = int(edge_pixels.shape[0] * scale_factor)
+    # # Calculate the new height
+    # new_height = int(edge_pixels.shape[0] * scale_factor)
 
-    # Resize the edge_pixels array
-    resized_edge_pixels = cv2.resize(edge_pixels, (new_width, new_height), interpolation=cv2.INTER_LINEAR)
-        # Set a threshold value (typically, 127 is used for binary images)
-    threshold_value = 127
+    # # Resize the edge_pixels array
+    # resized_edge_pixels = cv2.resize(edge_pixels, (new_width, new_height), interpolation=cv2.INTER_LINEAR)
+    #     # Set a threshold value (typically, 127 is used for binary images)
+    # threshold_value = 127
 
     # Apply thresholding to convert to a binary image
-    _, binary_edge_pixels = cv2.threshold(resized_edge_pixels, threshold_value, 255, cv2.THRESH_BINARY)
-    print(f"edge_pixels.shape {edge_pixels.shape}")
+    # _, binary_edge_pixels = cv2.threshold(resized_edge_pixels, threshold_value, 255, cv2.THRESH_BINARY)
+    # print(f"edge_pixels.shape {edge_pixels.shape}")
 
-    print(f"edge_pixels.unique {np.unique(edge_pixels, return_counts=True)}")
+    # print(f"edge_pixels.unique {np.unique(edge_pixels, return_counts=True)}")
 
-    print(f"binary_edge_pixels.shape {binary_edge_pixels.shape}")
-    print(f"binary_edge_pixels.unique {np.unique(binary_edge_pixels, return_counts=True)}")
-
+    # print(f"binary_edge_pixels.shape {binary_edge_pixels.shape}")
+    # print(f"binary_edge_pixels.unique {np.unique(binary_edge_pixels, return_counts=True)}")
+    current_width, current_height = 640, 360
     # resized_edge_pixels now contains the downsampled image with a width of 600 pixels while maintaining the aspect ratio.
-    return edge_pixels, current_width, current_height
+    return result, current_width, current_height
 
 
 def get_drivable_area_in_1D(segmentation_matrix, current_width, current_height):
